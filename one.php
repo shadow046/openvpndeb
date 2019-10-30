@@ -33,7 +33,7 @@
 			<div class="collapse navbar-collapse" id="navigatebar">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item">
-						<a class="nav-link" href="https://www.phcorner.net/members/745093/">PHCorner</a>
+						<a class="nav-link" href="https://phcorner.net/members/373681/">PHCorner</a>
 					</li>
 					
 				</ul>
