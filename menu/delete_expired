@@ -1,18 +1,13 @@
 #!/bin/bash
-datenow=$(date +%s)
-for user in $(awk -F: '{print $1}' /etc/passwd); do
-expdate=$(chage -l $user|awk -F: '/Account expires/{print $2}')
-echo $expdate|grep -q never && continue
-echo -n "User \`$user' expires on $expdate ... "
-expsec=$(date +%s --date="$expdate")
-diff=$(echo $datenow - $expsec|bc -l)
-echo $diff|grep -q ^\- && echo okay && continue
-# got this far, account must have expired
-userdel -r $user  &> /dev/null
-done
-clear
-echo -e ""
-echo -e " ==Shadow046== "
-echo -e ""
-echo -e "  All Expired Users Has Been Deleted"
-echo -e ""
+nowsecs=$( date +%s )
+while read account
+do
+    username=$( echo $account | cut -d: -f1  )
+    expiredays=$( echo $account | cut -d: -f2 )
+    expiresecs=$(( $expiredays * 86400 ))
+    if [ $expiresecs -le $nowsecs ]
+    then
+        echo "$username has expired deleting"
+        userdel -r "$username"
+    fi
+done < <( cut -d: -f1,8 /etc/shadow | sed /:$/d )
